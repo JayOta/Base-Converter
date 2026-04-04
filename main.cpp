@@ -68,11 +68,13 @@ vector<int> inversedNumber(int number) {
     }
 
 
+void convertToOctal(){
+	cout << "Converting to Octal";    
+}
 
 
 
-
-    void convertToDecimal(int number){
+void convertToDecimal(int number){
     cout << "Convertendo para Decimal..\n";
     string number_string = to_string(number); // Converte o número para string
     int number_counter = number_string.length(); // Contador de tamanho do número original
@@ -106,17 +108,8 @@ vector<int> inversedNumber(int number) {
 
     cout << "Número Binário convertido em: " << decimal_number; // Imprime o Número Convertido para Decimal
 
-    // Pegar o Tamanho do número binário
-    // Contar a quantidade de posições(da direita para esquerda (começando do zero))
-    // Pegar o primeiro dígito da direita ->
-    // Multiplicar o dígito por (dois elevado a sua posição)
-    // Fazer isto com todos os dígitos
-    // Fazer a soma entre as multiplicações entre estes números
-    // Printar o Número Decimal Final
 }
-
 void convertToBinary(int number){
-
     int rest;
     vector<int> restArray;
     vector<string> resultArray;
@@ -136,116 +129,69 @@ void convertToBinary(int number){
     }
 }
 
-void convertToOctal(){
-	cout << "Converting to Octal";    
-}
+bool verifyInput(char input, unordered_map<string, vector<char>> initial_letters){
 
-struct Options {
-    string type;
-    vector<string> value;
-    vector<string> initials_letters;
-
-    void setInitialLetters(vector<char> value){
-        this.initials_letters = value;    
-}
-    vector<string> getInitialLetters() {
-            if(initials_letters){
-                return initials_letters;
-        }   else {
-                return "Falta de inicialização de variável: initials_letters";   
+    for(auto const& [key, value] : initial_letters){
+        for(char val : value){
+            if(input == val){
+                return true; // Encontrou algum? -> Já retorna true automaticamente
+            } 
         }
     }
-};
-
-bool verifyInput(bool input){
-    bool correct_answer;
-    for(char letter : getInitialLetters()) {
-        if(input != letter){
-            correct_answer = false;
-        } else {
-            correct_answer = true;
-        }
-    }
-    return correct_answer;
+    return false;
 }
 
 int main() {
     float input;
     char a;
-    unordered_map<string, string> options;
-    options["Binario" || "binario"] = 'B', 'b';
-    options["Decimal" || "decimal"] = 'D', 'd';
-    options["Octal" || "octal"] = 'O', 'o';
-    
-    // Criar uma forma de pegar só os option.value;
-    // setInitialLetters({'B', 'b', 'D', 'd', 'O', 'o'}); // Fazer com que pegue da options.value
+    unordered_map<string, vector<char>> options;
+    options["Binario"] = {'B', 'b'};
+    options["Decimal"] = {'D', 'd'};
+    options["Octal"] = {'O', 'o'};
+
+
     cout << "Bem vindo ao Conversor entre Binários e Decimais!\n\n";
     cout << "Escolha o tipo de Entrada: ";
 
-    for(int i = 0; i < options.size() - 1; i++){ // "Binario", "Decimal", "Octal"
-        for(int j = 0; j < options[i].size() - 1; j++){ // "Binario['B','b']", "Decimal['D', 'd']"..
-            if(i == options.size() - 1){ // Se for a última palavra (ex: 'Octal') ->
-                cout << "'" << options[i][j] << "'" << "(" << options[i] << "): "; // Imprime: ('O'(Octal):)
-            }
-            else if(j == 0){ // Pega as letras maiúsculas => array[0] => 'B', 'D', 'O'
-                cout << "'" << options[i][j] << "'" << "(" << options[i] << "), "; // Imprime: 'B'(Binario), 'D'(Decimal),
+    int i = 0;
+    while(i < options.size() - 1){ // Options -> 3 elementos -> size = 4 -> size real = "3" => (size() - 1)
+        for(auto const& [key, val] : options){
+            if(i == options.size() - 1){
+                cout << "'" << val[0] << "'" << "(" << key << "): ";
+                break;     
+            } else {
+                cout << "'" << val[0] << "'" << "(" << key << "),";
+                i++;
             }
         }
     }
-    // cout << "Escolha o tipo de Entrada: 'B'(binario), 'D'(decimal),'O'(Octal): "; 
+
     cin >> a;
-    bool verified = verifyInput(a);
+    bool verified = verifyInput(a, options);
     if(!verified){
         while(!verified){
             cout << "Escolha apenas entre: 'B'(binario) ou 'D'(decimal): ";
             cin >> a;
-            verified = verifyInput(a);
+            verified = verifyInput(a, options);
             if(verified){
                 break;
             }
         }
-    } else{
+    } 
         if(a == 'B' || a == 'b'){
-        cout << "Digite a entrada (em Binário): ";
-        cin >> input;
-        convertToDecimal(input);
-    }
-    else if(a == 'D' || a == 'd') {
-        cout << "Digite a entrada (em Decimal): ";
-        cin >> input;
-        convertToBinary(input);
-    }
-    else if(a == 'O' || a == 'o') {
-        cout << "Digite a entrada (em Decimal): ";
-        cin >> input;
-        convertToBinary(input);
-    }        
-     }
-
-//     if(a != 'B' && a != 'b' && a != 'D' && a != 'd'){
-//     while(a != 'B' && a != 'b' && a != 'D' && a != 'd'){
-//         cout << "Escolha apenas entre: 'B'(binario) ou 'D'(decimal): ";
-//         cin >> a;
-//         if(a == 'B' || a == 'b' || a == 'D' || a == 'd'){
-//             break;
-//         }
-//     }
-// } else {
-//     if(a == 'B' || a == 'b'){
-//         cout << "Digite a entrada (em Binário): ";
-//         cin >> input;
-//         convertToDecimal(input);
-//     }
-//     else if(a == 'D' || a == 'd') {
-//         cout << "Digite a entrada (em Decimal): ";
-//         cin >> input;
-//         convertToBinary(input);
-//     }
-//     else if(a == 'O' || a == 'o') {
-//         cout << "Digite a entrada (em Decimal): ";
-//         cin >> input;
-//         convertToBinary(input);
-//     }
-//    }
+            cout << "Digite a entrada (em Binário): ";
+            cin >> input;
+            convertToDecimal(input);
+        }
+        else if(a == 'D' || a == 'd') {
+            cout << "Digite a entrada (em Decimal): ";
+            cin >> input;
+            convertToBinary(input);
+        }
+        else if(a == 'O' || a == 'o') {
+            cout << "Digite a entrada (em Decimal): ";
+            cin >> input;
+            convertToBinary(input);
+        }        
     return 0;
 }
