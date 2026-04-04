@@ -39,6 +39,7 @@ vector<int> inversedNumber(vector<int> array) {
     }
     
 
+
 vector<int> inversedNumber(int number) {
     string string_number = to_string(number);
     vector<char> array = {};
@@ -68,13 +69,63 @@ vector<int> inversedNumber(int number) {
     }
 
 
-void convertToOctal(){
-	cout << "Converting to Octal";    
+
+
+
+
+
+void OctaltoDecimal(int number){
+    cout << "Converting to Decimal..";
+    // Para Cada dígito ->
+    // Fazer: Digito vezes base elevada a posição
+    // Somar o resultado entre todos os produtos
+    // Resultado achado
 }
 
+void decimalToOctal(int number){
+	cout << "Converting to Octal..";
+}
+void octaltoDecimal(int number){
+    cout << "Convertendo para Decimal..\n";
+    string number_string = to_string(number); // Converte o número para string
+    int number_counter = number_string.length(); // Contador de tamanho do número original
+    vector<int> inversed_number = inversedNumber(number); // Transforma o número em um array de int
+    vector<int> final_sum = {}; // Criado para fazer as somas finais
+    int current_number = 0;
+    for(int i = 0; i < number_counter; i++){
+        current_number = inversed_number[i] * ((int)pow(8, i)); // Pega o número original da direita e multiplica por ("dois"(formato binárop) elevado a sua posição)
+        final_sum.push_back(current_number); // Adiciona esse resultado ao array da soma final
+    }
+    string visual_numbers = "";
+    vector<int> final_sum_inverted = inversedNumber(final_sum);
+    int array_size = static_cast<int>(final_sum_inverted.size());
+    for(int j = 0; j < array_size; j++){
+        cout << "Números a serem somados: ";
+        cout << "[";
+        for(int k = 0; k <= j; k++){ // (j = 0, k = 0) -> [0]; (j = 1, k = 0..1) -> [0,1]..  
+            if(k == j){ // Se o elemento atingir a (posição final) => "j" ->  
+                cout << final_sum_inverted[k]; // Imprime apenas o elemento
+            } else { // Caso (haja mais elementos após ele) => "k < j"
+                cout << final_sum_inverted[k] << ","; // Imprime o elemento com uma vírgula a frente
+            }
+        }
+        cout << "]\n\n"; // Fecha os colchetes e quebra uma linha e pula outra
+    }
+    
+    int decimal_number = 0; // Número decimal final
+    for(int number : final_sum) { // Para cada número do array da soma final ->
+        decimal_number += number; // Soma ele com o valor do Número Decimal Final
+    }
 
+    cout << "Número Octal convertido em: " << decimal_number; // Imprime o Número Convertido para Decimal
 
-void convertToDecimal(int number){
+}
+
+void octalToBinary(int number){
+    cout << "Converting to Binary..";
+}
+
+void binaryToDecimal(int number){
     cout << "Convertendo para Decimal..\n";
     string number_string = to_string(number); // Converte o número para string
     int number_counter = number_string.length(); // Contador de tamanho do número original
@@ -107,25 +158,29 @@ void convertToDecimal(int number){
     }
 
     cout << "Número Binário convertido em: " << decimal_number; // Imprime o Número Convertido para Decimal
-
 }
-void convertToBinary(int number){
-    int rest;
-    vector<int> restArray;
-    vector<string> resultArray;
-    for(int i = 0; number > 1; i++){
 
-        float rest = number % 2;
-        number = number / 2;
-        restArray.push_back(rest);
+void binaryToOctal(int number){
+    cout << "Converting to Octal..";
+}
+
+void decimalToBinary(int number){
+    int rest; // valor do resto
+    vector<int> restArray; // armazena o resto
+    vector<string> resultArray; // armazena o resultado
+    for(int i = 0; number > 1; i++){ // para cada elemento do input
+
+        float rest = number % 2; // Pega o resto entre a divisão do input e a "base"(2)
+        number = number / 2; // Transforma o input no resultado da sua divisão e a "base"(2)
+        restArray.push_back(rest); // Pega o resta dessa divisão do input e a base e armazena 
     }
     
-    restArray.push_back(number); // number == 1
-    cout << "\n";
-    cout << "Saída (em Binário): ";
-    reverse(restArray.begin(), restArray.end());
-    for(int num : restArray){
-        cout << num << "";
+    restArray.push_back(number); // No final ele pega o número que sobrou no quociente
+    cout << "\n"; // Quebra uma linha
+    cout << "Saída (em Binário): "; // Mensagem
+    reverse(restArray.begin(), restArray.end()); // Inverte o array que está com os números que sobraram e do último quociente
+    for(int num : restArray){ // Para cada valor do array invertido
+        cout << num << ""; // Printa cada número
     }
 }
 
@@ -141,17 +196,46 @@ bool verifyInput(char input, unordered_map<string, vector<char>> initial_letters
     return false;
 }
 
-int main() {
-    float input;
-    char a;
+
+
+
+int input(char answer){
+    int input;
+    switch(answer){
+        case 'B': // Sem "break" o código automaticamente para o próximo statement
+        case 'b':
+            cout << "Digite a entrada (em Binário): ";
+            cin >> input;
+            return input;
+            break;
+        case 'D': 
+        case 'd':
+            cout << "Digite a entrada (em Decimal): ";
+            cin >> input;
+            return input;
+            break;
+        case 'O':  
+        case 'o':
+            cout << "Digite a entrada (em Octal): ";
+            cin >> input;
+            return input;
+            break;
+    } 
+}
+
+
+
+char input_question(char answer){
     unordered_map<string, vector<char>> options;
+    
     options["Binario"] = {'B', 'b'};
     options["Decimal"] = {'D', 'd'};
     options["Octal"] = {'O', 'o'};
 
-
     cout << "Bem vindo ao Conversor entre Binários e Decimais!\n\n";
     cout << "Escolha o tipo de Entrada: ";
+    
+
 
     int i = 0;
     while(i < options.size() - 1){ // Options -> 3 elementos -> size = 4 -> size real = "3" => (size() - 1)
@@ -166,32 +250,99 @@ int main() {
         }
     }
 
-    cin >> a;
-    bool verified = verifyInput(a, options);
+    cin >> answer;
+    bool verified = verifyInput(answer, options);
     if(!verified){
         while(!verified){
-            cout << "Escolha apenas entre: 'B'(binario) ou 'D'(decimal): ";
-            cin >> a;
-            verified = verifyInput(a, options);
+            cout << "Escolha apenas entre: 'B'(binario) ou 'D'(decimal): "; // Automatizar escolhas
+            cin >> answer;
+            verified = verifyInput(answer, options);
             if(verified){
                 break;
             }
         }
-    } 
-        if(a == 'B' || a == 'b'){
-            cout << "Digite a entrada (em Binário): ";
-            cin >> input;
-            convertToDecimal(input);
+    }
+
+    return toupper(answer);
+}
+
+char output_question(char answer){
+    unordered_map<string, vector<char>> options;
+    options["Binario"] = {'B', 'b'};
+    options["Decimal"] = {'D', 'd'};
+    options["Octal"] = {'O', 'o'};
+
+    cout << "Escolha o tipo de Saída -> ";
+
+    int i = 0;
+    while(i < options.size() - 1){ // Options -> 3 elementos -> size = 4 -> size real = "3" => (size() - 1)
+        for(auto const& [key, val] : options){
+            if(i == options.size() - 1){
+                cout << "'" << val[0] << "'" << "(" << key << "): ";
+                break;     
+            } else {
+                cout << "'" << val[0] << "'" << "(" << key << "),";
+                i++;
+            }
         }
-        else if(a == 'D' || a == 'd') {
-            cout << "Digite a entrada (em Decimal): ";
-            cin >> input;
-            convertToBinary(input);
+    }
+
+    cin >> answer;
+    bool verified = verifyInput(answer, options);
+    if(!verified){
+        while(!verified){
+            cout << "Escolha apenas entre: 'B'(binario) ou 'D'(decimal): "; // Automatizar escolhas
+            cin >> answer;
+            verified = verifyInput(answer, options);
+            if(verified){
+                break;
+            }
         }
-        else if(a == 'O' || a == 'o') {
-            cout << "Digite a entrada (em Decimal): ";
-            cin >> input;
-            convertToBinary(input);
-        }        
+    }
+    return toupper(answer);
+}
+
+
+int main() {
+    char answer_1, answer_2; // Declaradas vazias, mas outros valores serão atribuidos a elas dentro das funções
+    answer_1 = input_question(answer_1);
+    answer_2 = output_question(answer_2);
+    int input_answer = input(answer_1);
+
+    if(answer_1 == 'B' && answer_2 == 'D') {
+        binaryToDecimal(input_answer);
+    } else if(answer_1 == 'B' && answer_2 == 'O'){
+        binaryToOctal(input_answer);
+    } else if(answer_1 == 'D' && answer_2 == 'B'){
+        decimalToBinary(input_answer);
+    } else if(answer_1 == 'D' && answer_2 == 'O'){
+        decimalToOctal(input_answer);
+    } else if(answer_1 == 'O' && answer_2 == 'D'){
+        octaltoDecimal(input_answer);
+    } else if(answer_1 == 'O' && answer_2 == 'B'){
+        octalToBinary(input_answer);
+    }
+
+        // if(answer == 'B' || answer == 'b'){
+        //     cout << "Digite a entrada (em Binário): ";
+        //     cin >> input;
+        //     binaryToDecimal(input);
+        // }
+        // else if(answer == 'D' || answer == 'd') {
+        //     cout << "Digite a entrada (em Decimal): ";
+        //     cin >> input;
+        //     convertToBinary(input);
+        // }
+        // else if(answer == 'O' || answer == 'o') {
+        //     cout << "Digite a entrada (em Decimal): ";
+        //     cin >> input;
+        //     octaltoDecimal(input);
+        // }      
+
     return 0;
 }
+
+
+// Digita o tipo da Entrada
+// Digita o tipo da Saída
+// Digita a entrada
