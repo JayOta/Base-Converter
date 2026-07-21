@@ -12,7 +12,7 @@ using namespace std;
 string OldInversedNumber(int number) {
     string string_number = to_string(number); // transforma em string
     vector<char> array = {}; // cria o array
-    int number_size = string_number.length(); // pega o tamanho do número original  
+    int number_size = string_number.length(); // pega o tamanho do número original
     for(int i = 0 ; i < number_size; i++){
         array.push_back(string_number[i]); // coloca cada número no array de chat
     }
@@ -69,8 +69,31 @@ vector<int> inversedNumber(int number) {
     }
 
 
+void divideIntoGroups(int number, int groupSize) {
+    string numbers = to_string(number);
+    vector<vector<char>> groups;
+    vector<char> group;
+    for(size_t i = 0; i < numbers.size(); i++){ // 0 1 0 1 0 1 0 1 0 1
+            group.push_back(numbers[i]); // 1 => 9
+            if (group.size() == groupSize){
+                    groups.push_back(group); // groups = {{0,1,0}, {1,0,1}, {0,1,0} }
+                    group.clear();
+                }
+    }
+    // O que eu faco quando sobra 1 ou 2 numeros? "group = {1}" || "group = {1,0}"
+    // Se o group tiver algo, adiciona ele ao groups
+    if(group.size() > 0) {
+        groups.push_back(group);
+    }
 
-
+    for(const auto& group : groups) {
+        cout << "group: [";
+        for(char number : group) {
+            cout << number << " ";
+        }
+        cout << "]";
+    }
+}
 
 
 
@@ -162,6 +185,12 @@ void binaryToDecimal(int number){
 
 void binaryToOctal(int number){
     cout << "Converting to Octal..";
+    // pega o array de numeros binarios e inverte o array
+    vector<int> numbers = inversedNumber(number);
+    // divide em grupos de 3
+    // faz a conversao de cada grupo para decimal
+    // inverte a ordem dos numeros decimais
+    // junta os resultados e printa
 }
 
 void decimalToBinary(int number){
@@ -198,9 +227,8 @@ bool verifyInput(char input, unordered_map<string, vector<char>> initial_letters
 
 
 
-
 int input(char answer){
-    int input;
+    int input; // <- Trocar o tipo para char
     switch(answer){
         case 'B': // Sem "break" o código automaticamente para o próximo statement
         case 'b':
@@ -208,22 +236,20 @@ int input(char answer){
             cin >> input;
             return input;
             break;
-        case 'D': 
+        case 'D':
         case 'd':
             cout << "Digite a entrada (em Decimal): ";
             cin >> input;
             return input;
             break;
-        case 'O':  
+        case 'O':
         case 'o':
             cout << "Digite a entrada (em Octal): ";
             cin >> input;
             return input;
             break;
-    } 
+    }
 }
-
-
 
 char input_question(char answer){
     unordered_map<string, vector<char>> options;
@@ -279,7 +305,7 @@ char output_question(char answer){
         for(auto const& [key, val] : options){
             if(i == options.size() - 1){
                 cout << "'" << val[0] << "'" << "(" << key << "): ";
-                break;     
+                break;
             } else {
                 cout << "'" << val[0] << "'" << "(" << key << "),";
                 i++;
@@ -311,38 +337,18 @@ int main() {
 
     if(answer_1 == 'B' && answer_2 == 'D') {
         binaryToDecimal(input_answer);
-    } else if(answer_1 == 'B' && answer_2 == 'O'){
-        binaryToOctal(input_answer);
     } else if(answer_1 == 'D' && answer_2 == 'B'){
         decimalToBinary(input_answer);
+    } else if(answer_1 == 'B' && answer_2 == 'O'){
+        // binaryToOctal(input_answer);
+        divideIntoGroups(input_answer, 3);
+    } else if(answer_1 == 'O' && answer_2 == 'B'){
+        octalToBinary(input_answer);
     } else if(answer_1 == 'D' && answer_2 == 'O'){
         decimalToOctal(input_answer);
     } else if(answer_1 == 'O' && answer_2 == 'D'){
         octaltoDecimal(input_answer);
-    } else if(answer_1 == 'O' && answer_2 == 'B'){
-        octalToBinary(input_answer);
     }
-
-        // if(answer == 'B' || answer == 'b'){
-        //     cout << "Digite a entrada (em Binário): ";
-        //     cin >> input;
-        //     binaryToDecimal(input);
-        // }
-        // else if(answer == 'D' || answer == 'd') {
-        //     cout << "Digite a entrada (em Decimal): ";
-        //     cin >> input;
-        //     convertToBinary(input);
-        // }
-        // else if(answer == 'O' || answer == 'o') {
-        //     cout << "Digite a entrada (em Decimal): ";
-        //     cin >> input;
-        //     octaltoDecimal(input);
-        // }      
 
     return 0;
 }
-
-
-// Digita o tipo da Entrada
-// Digita o tipo da Saída
-// Digita a entrada
