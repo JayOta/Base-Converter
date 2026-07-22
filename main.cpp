@@ -66,7 +66,24 @@ vector<char> inversedNumberStr(string number) {
     return numbers;
     }
 
-void getGroups(vector<vector<char>> groups){
+vector<char> vecCharInversor(vector<char> vector) {
+        int left = 0;
+        int right = vector.size() - 1;
+
+        while(left < right) {
+            char temp = vector[left];
+            vector[left] = vector[right];
+            vector[right] = temp;
+
+            left++;
+            right--;
+        }
+
+        return vector;
+}
+
+    void getGroups(vector<vector<char>> groups){
+    cout << "showing groups: \n\n";
     int j = 0; // "j" -> conta a quantidade de grupos
     for(const auto& group : groups) {
         int i = 0; // "i" -> conta os numeros printados num grupo
@@ -205,25 +222,66 @@ void binaryToDecimal(string number){
     cout << "Número Binário convertido em: " << decimal_number <<  "\n" ; // Imprime o Número Convertido para Decimal
 }
 
+// vector<> arrayInverter(vector<char> group) {
+
+// }
+
 void binaryToOctal(string binary_number){
-    cout << "Converting to Octal..";
+    cout << "Converting to Octal..\n";
     
-    // pega o "array" tipo string de numeros binarios, converte ele para umt vetor int, e o inverte - Completed
-    vector<int> inversed_binary = inversedNumberVecInt(stringToVecInt(binary_number));
+    // converte de string para um vetor int, e o inverte
+    vector<int> inversed_binary = inversedNumberVecInt(stringToVecInt(binary_number)); // criar uma funcao que ja inverte de uma string
     
-    // divide em grupos de 3 - Completed
-    string inversed_binary_numbers = vecIntToString(inversed_binary);
+    // apos invertido, o converte de volta para string
+    string inversed_binary_numbers = vecIntToString(inversed_binary); // remover essa linha apos o ultimo passo
     
-    //
+    // divide em grupos de 3
     vector<vector<char>> groups = divideIntoGroups(inversed_binary_numbers, 3);
     
-    //
-    getGroups(groups);
+    getGroups(groups); // teste para ver se os grupos estao sendo separados corretamente
 
+    // inverte os group de groups
+    vector<vector<char>> new_groups; // cria um novo vetor de vetores de char
+    for(vector<char> group : groups){ // pra cada vetor dentro do vetor pai
+        vector<char> new_group = vecCharInversor(group); // cria um vetor com a ordem dos elementos invertida
+        new_groups.push_back(new_group); // adiciona esse vetor antigo atualizado ao vetor pai
+        cout << "new_groups size:" << new_groups.size() << "\n";
+    }
+    for(vector<char> new_group : new_groups){ // pra cada vetor dentro do vetor pai
+        cout << "group: [ ";
+        for(char number : new_group){ // pra cada elemento num vetor
+            cout << number << " "; // imprime o elemento
+            }
+            cout << " ]\n";
+        }
+    
+    // transformar os vetores filhos em strings unicas (tirar toda a parte de baixo onde os transforma em vector<int>)
 
-    // faz a conversao de cada grupo para decimal
-    // inverte a ordem dos numeros decimais
-    // junta os resultados e printa
+    // transforma os elementos array de char em int
+    vector<vector<int>> int_groups; // vetor pai
+    vector<int> int_group; // vetor filho
+    for(vector<char> new_group : new_groups){
+        for(char number : new_group){
+            int_group.push_back(number - '0'); // add el ao filho
+        }
+        int_groups.push_back(int_group); // add vetor filho ao vetor pai
+    }
+
+    // printa o vetor de inteiros
+    for(vector<int> int_group : int_groups) {
+        cout << "int_group: ";
+        for(int number : int_group) {
+            cout << number << " ";
+        }
+        cout << "\n";
+    }
+    
+    // deixando os vetores filho em tipo string(sem transforma-los em vector<int>)
+    // faz a juncao dos elementos de cada vetor filho
+    // usa o binaryToDecimal() em cada juncao de string dos vetores filho
+    // pega cada mumero retornado do binaryToDecimal()
+    // junta os numeros
+    // retorna o numero octal final
 }
 
 void decimalToBinary(string number){
@@ -378,8 +436,8 @@ int main() {
     } else if(answer_1 == 'D' && answer_2 == 'B'){
         decimalToBinary(input_answer);
     } else if(answer_1 == 'B' && answer_2 == 'O'){
-        // binaryToOctal(input_answer);
-        divideIntoGroups(input_answer, 3);
+        binaryToOctal(input_answer);
+        // divideIntoGroups(input_answer, 3);
     } else if(answer_1 == 'O' && answer_2 == 'B'){
         octalToBinary(input_answer);
     } else if(answer_1 == 'D' && answer_2 == 'O'){
