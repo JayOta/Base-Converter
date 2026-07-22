@@ -24,10 +24,10 @@ string OldInversedNumber(int number) {
     return numbers;
 }
 
-vector<int> inversedNumber(vector<int> array) {
+vector<int> inversedNumberVecInt(vector<int> array) {
     int left = 0; // Só "0" pois servirá como (ponteiro do array/índice)
     int right = array.size() - 1; // Só "array.size() - 1" pois servirá como (ponteiro do array/índice)
-    while(left < right){ // Enquanto ponteiro da esquerda for menor que ponteiro da direita 
+    while(left < right){ // Enquanto ponteiro da esquerda for menor que ponteiro da direita
         char temp = array[left]; // var temporária = ponteiro da esquerda
         array[left] = array[right]; // ponteiro da esquerda = ponteiro da direita
         array[right] = temp; // ponteiro da direita igual a "var temporária" => (ponteiro da esquerda)
@@ -38,14 +38,12 @@ vector<int> inversedNumber(vector<int> array) {
     return array;
     }
     
-
-
-vector<int> inversedNumber(int number) {
-    string string_number = to_string(number);
+vector<char> inversedNumberStr(string number) {
+    // string string_number = to_string(number);
     vector<char> array = {};
-    int number_size = string_number.length();
+    int number_size = number.length();
     for(int i = 0; i < number_size; i++){
-        array.push_back(string_number[i]);
+        array.push_back(number[i]);
     }
 
 
@@ -60,7 +58,7 @@ vector<int> inversedNumber(int number) {
             right--; // Ponteiro da direita volta uma posição
         }
 
-        vector<int> numbers = {};
+        vector<char> numbers = {};
         for(char number : array){
             numbers.push_back(number - '0'); // (number - '0') => "Tira a diferença entre o valor ASCII e o número real" 
         }
@@ -68,9 +66,25 @@ vector<int> inversedNumber(int number) {
     return numbers;
     }
 
+void getGroups(vector<vector<char>> groups){
+    int j = 0; // "j" -> conta a quantidade de grupos
+    for(const auto& group : groups) {
+        int i = 0; // "i" -> conta os numeros printados num grupo
+        cout << "group " << j + 1 << ": ["; // group ?: [
+        for(char number : group) { // para cada numero no group
+            if(i == group.size() - 1){ // se a contagem chegar no ultimo numero ->
+                cout << number; // printa apenas o ultimo numero
+            } else {
+                cout << number << ","; // se a contagem nao estiver no ultimo numero, printa ele com virgula
+                i++; // soma um na contagem de numeros
+            }
+        }
+        cout << "]\n"; // fecha a representacao visual do grupo
+        j++; // soma um na contagem de grupos
+    }
+}
 
-void divideIntoGroups(int number, int groupSize) {
-    string numbers = to_string(number);
+vector<vector<char>> divideIntoGroups(string numbers, int groupSize) {
     vector<vector<char>> groups;
     vector<char> group;
     for(size_t i = 0; i < numbers.size(); i++){ // 0 1 0 1 0 1 0 1 0 1
@@ -85,34 +99,42 @@ void divideIntoGroups(int number, int groupSize) {
     if(group.size() > 0) {
         groups.push_back(group);
     }
+    
+    // getGroups(group, groups); // mostra cada group de um vetor de vetores
+    return groups;
+}
 
-    for(const auto& group : groups) {
-        cout << "group: [";
-        for(char number : group) {
-            cout << number << " ";
-        }
-        cout << "]";
+vector<int> stringToVecInt(string string_numbers) {
+    vector<int> vec_int_numbers;
+
+    for(size_t i = 0; i < string_numbers.size(); i++){
+        vec_int_numbers.push_back(string_numbers[i] - '0');
     }
+    
+    return vec_int_numbers;
 }
 
+string vecIntToString(vector<int> array) {
+    string string_numbers = "";
 
+    for(size_t i = 0; i < array.size(); i++){
+        char digito = array[i] + '0';
 
-void OctaltoDecimal(int number){
-    cout << "Converting to Decimal..";
-    // Para Cada dígito ->
-    // Fazer: Digito vezes base elevada a posição
-    // Somar o resultado entre todos os produtos
-    // Resultado achado
+        string_numbers += digito;
+    }
+
+    return string_numbers;
 }
 
-void decimalToOctal(int number){
+void decimalToOctal(string number){
 	cout << "Converting to Octal..";
 }
-void octaltoDecimal(int number){
+
+void octalToDecimal(string number){
     cout << "Convertendo para Decimal..\n";
-    string number_string = to_string(number); // Converte o número para string
-    int number_counter = number_string.length(); // Contador de tamanho do número original
-    vector<int> inversed_number = inversedNumber(number); // Transforma o número em um array de int
+    // string number_string = to_string(number); // Converte o número para string
+    int number_counter = number.length(); // Contador de tamanho do número original
+    vector<int> inversed_number = inversedNumberVecInt(stringToVecInt(number)); // Transforma o número em um array de int
     vector<int> final_sum = {}; // Criado para fazer as somas finais
     int current_number = 0;
     for(int i = 0; i < number_counter; i++){
@@ -120,7 +142,7 @@ void octaltoDecimal(int number){
         final_sum.push_back(current_number); // Adiciona esse resultado ao array da soma final
     }
     string visual_numbers = "";
-    vector<int> final_sum_inverted = inversedNumber(final_sum);
+    vector<int> final_sum_inverted = inversedNumberVecInt(final_sum);
     int array_size = static_cast<int>(final_sum_inverted.size());
     for(int j = 0; j < array_size; j++){
         cout << "Números a serem somados: ";
@@ -140,19 +162,19 @@ void octaltoDecimal(int number){
         decimal_number += number; // Soma ele com o valor do Número Decimal Final
     }
 
-    cout << "Número Octal convertido em: " << decimal_number; // Imprime o Número Convertido para Decimal
+    cout << "Número Octal convertido em: " << decimal_number << "\n"; // Imprime o Número Convertido para Decimal
 
 }
 
-void octalToBinary(int number){
+void octalToBinary(string number){
     cout << "Converting to Binary..";
 }
 
-void binaryToDecimal(int number){
+void binaryToDecimal(string number){
     cout << "Convertendo para Decimal..\n";
-    string number_string = to_string(number); // Converte o número para string
-    int number_counter = number_string.length(); // Contador de tamanho do número original
-    vector<int> inversed_number = inversedNumber(number); // Transforma o número em um array de int
+    // string number_string = to_string(number); // Converte o número para string
+    int number_counter = number.length(); // Contador de tamanho do número original
+    vector<int> inversed_number = inversedNumberVecInt(stringToVecInt(number)); // Transforma o número em um array de int
     vector<int> final_sum = {}; // Criado para fazer as somas finais
     int current_number = 0;
     for(int i = 0; i < number_counter; i++){
@@ -160,7 +182,7 @@ void binaryToDecimal(int number){
         final_sum.push_back(current_number); // Adiciona esse resultado ao array da soma final
     }
     string visual_numbers = "";
-    vector<int> final_sum_inverted = inversedNumber(final_sum);
+    vector<int> final_sum_inverted = inversedNumberVecInt(final_sum);
     int array_size = static_cast<int>(final_sum_inverted.size());
     for(int j = 0; j < array_size; j++){
         cout << "Números a serem somados: ";
@@ -180,37 +202,52 @@ void binaryToDecimal(int number){
         decimal_number += number; // Soma ele com o valor do Número Decimal Final
     }
 
-    cout << "Número Binário convertido em: " << decimal_number; // Imprime o Número Convertido para Decimal
+    cout << "Número Binário convertido em: " << decimal_number <<  "\n" ; // Imprime o Número Convertido para Decimal
 }
 
-void binaryToOctal(int number){
+void binaryToOctal(string binary_number){
     cout << "Converting to Octal..";
-    // pega o array de numeros binarios e inverte o array
-    vector<int> numbers = inversedNumber(number);
-    // divide em grupos de 3
+    
+    // pega o "array" tipo string de numeros binarios, converte ele para umt vetor int, e o inverte - Completed
+    vector<int> inversed_binary = inversedNumberVecInt(stringToVecInt(binary_number));
+    
+    // divide em grupos de 3 - Completed
+    string inversed_binary_numbers = vecIntToString(inversed_binary);
+    
+    //
+    vector<vector<char>> groups = divideIntoGroups(inversed_binary_numbers, 3);
+    
+    //
+    getGroups(groups);
+
+
     // faz a conversao de cada grupo para decimal
     // inverte a ordem dos numeros decimais
     // junta os resultados e printa
 }
 
-void decimalToBinary(int number){
+void decimalToBinary(string number){
     int rest; // valor do resto
     vector<int> restArray; // armazena o resto
     vector<string> resultArray; // armazena o resultado
-    for(int i = 0; number > 1; i++){ // para cada elemento do input
 
-        float rest = number % 2; // Pega o resto entre a divisão do input e a "base"(2)
-        number = number / 2; // Transforma o input no resultado da sua divisão e a "base"(2)
+    int integer_number = stoi(number); // transforma a string de numeros em int
+
+    for(int i = 0; integer_number > 1; i++){ // para cada elemento do input
+
+        float rest = integer_number % 2; // Pega o resto entre a divisão do input e a "base"(2)
+        integer_number = integer_number / 2; // Transforma o input no resultado da sua divisão e a "base"(2)
         restArray.push_back(rest); // Pega o resta dessa divisão do input e a base e armazena 
     }
     
-    restArray.push_back(number); // No final ele pega o número que sobrou no quociente
+    restArray.push_back(integer_number); // No final ele pega o número que sobrou no quociente
     cout << "\n"; // Quebra uma linha
     cout << "Saída (em Binário): "; // Mensagem
     reverse(restArray.begin(), restArray.end()); // Inverte o array que está com os números que sobraram e do último quociente
     for(int num : restArray){ // Para cada valor do array invertido
         cout << num << ""; // Printa cada número
     }
+    cout << "\n";
 }
 
 bool verifyInput(char input, unordered_map<string, vector<char>> initial_letters){
@@ -227,28 +264,29 @@ bool verifyInput(char input, unordered_map<string, vector<char>> initial_letters
 
 
 
-int input(char answer){
-    int input; // <- Trocar o tipo para char
+string input(char answer){
+    string input; // <- Trocar o tipo para char
     switch(answer){
         case 'B': // Sem "break" o código automaticamente para o próximo statement
         case 'b':
             cout << "Digite a entrada (em Binário): ";
             cin >> input;
-            return input;
+            return input; // string
             break;
         case 'D':
         case 'd':
             cout << "Digite a entrada (em Decimal): ";
             cin >> input;
-            return input;
+            return input; // string
             break;
         case 'O':
         case 'o':
             cout << "Digite a entrada (em Octal): ";
             cin >> input;
-            return input;
+            return input; // string
             break;
     }
+    return 0;
 }
 
 char input_question(char answer){
@@ -258,7 +296,7 @@ char input_question(char answer){
     options["Decimal"] = {'D', 'd'};
     options["Octal"] = {'O', 'o'};
 
-    cout << "Bem vindo ao Conversor entre Binários e Decimais!\n\n";
+    cout << "Bem vindo ao Conversor de Bases!\n\n";
     cout << "Escolha o tipo de Entrada: ";
     
 
@@ -333,7 +371,7 @@ int main() {
     char answer_1, answer_2; // Declaradas vazias, mas outros valores serão atribuidos a elas dentro das funções
     answer_1 = input_question(answer_1);
     answer_2 = output_question(answer_2);
-    int input_answer = input(answer_1);
+    string input_answer = input(answer_1);
 
     if(answer_1 == 'B' && answer_2 == 'D') {
         binaryToDecimal(input_answer);
@@ -347,7 +385,7 @@ int main() {
     } else if(answer_1 == 'D' && answer_2 == 'O'){
         decimalToOctal(input_answer);
     } else if(answer_1 == 'O' && answer_2 == 'D'){
-        octaltoDecimal(input_answer);
+        octalToDecimal(input_answer);
     }
 
     return 0;
